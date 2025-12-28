@@ -1,0 +1,646 @@
+<BaseScreen@Screen>:
+    canvas.before:
+        Color:
+            rgba: app.theme.colors["background"]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Label>:
+    color: app.theme.colors["text"]
+
+<Button>:
+    background_color: 0, 0, 0, 0
+    color: app.theme.colors["button_text"]
+    canvas.before:
+        Color:
+            rgba: app.theme.colors["button"]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+
+<TextInput>:
+    background_color: app.theme.colors["background"]
+
+
+<ChooseScreen>:
+    name: 'choosescreen'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: 'Welcome to TaskSphere'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.4
+            Label:
+                text: "Already have an account?"
+            Button:
+                text: 'Login'
+                on_press: root.manager.current = 'login'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.4
+            Label:
+                text: "New to TaskSphere?"
+            Button:
+                text: 'Signup'
+                on_press: root.manager.current = 'signup'
+
+<LoginScreen>:
+    name: 'login'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: 'Login'
+            font_size: 32
+            halign: "center"
+
+        Widget:
+            size_hint_y: 2
+
+        Label:
+            id: feedback_label
+            text: ""
+
+        TextInput:
+            id: username_input
+            hint_text: "Enter username"
+            multiline: False
+            size_hint_y: 0.5
+
+        TextInput:
+            id: password_input
+            hint_text: "Enter password"
+            password: True
+            multiline: False
+            size_hint_y: 0.5
+
+        Button:
+            text: "Login"
+            on_press: root.login_form(username_input.text, password_input.text)
+
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'choosescreen'
+
+<SignupScreen>:
+    name: 'signup'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: 'Signup'
+            font_size: 32
+
+        Label:
+            text: "Username must be 4 characters long"
+
+        Label:
+            halign: 'center'
+            text: "Password must be at least 8 \n characters, contain a capital letter,\n a numerical digit, and one of \n the following characters: !£$%^&*()@"
+
+        Label:
+            id: feedback_label
+            text: ""
+
+        TextInput:
+            id: username_input
+            hint_text: "Enter username"
+            multiline: False
+            size_hint_y: 0.5
+
+        TextInput:
+            id: password_input
+            hint_text: "Enter password"
+            password: True
+            multiline: False
+            size_hint_y: 0.5
+
+        Button:
+            text: "Signup"
+            on_press: root.signup_validation(username_input.text, password_input.text)
+
+
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'choosescreen'
+
+<MainScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: 'Home'
+            font_size: 32
+
+        Button:
+            text: "Create task"
+            on_press: root.manager.current = "createtask"
+
+        Button:
+            text: "Menu"
+            on_press: root.manager.current = "nav_menu"
+
+        Button:
+            text: "Log out"
+            on_press: root.log_out()
+            color: app.theme.colors["logout_text"]
+            canvas.before:
+                Color:
+                    rgba: app.theme.colors["logout"]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+<CreateTask>:
+    name: 'createtask'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+        spacing: 5
+
+        Label:
+            text: "Create task"
+            size_hint_y: 0.5
+            font_size: 32
+            halign: "center"
+
+        Label:
+            id: feedback_label
+            text: ""
+            size_hint_y: 0.5
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text_size: self.size
+                halign: "left"
+                text: "Title"
+
+            TextInput:
+                id: title_input
+                hint_text: "Enter task title"
+                multiline: False
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text: "Due date"
+                text_size: self.size
+                halign: "left"
+
+            TextInput:
+                id: due_date_input
+                hint_text: "DD-MM-YYYY"
+                multiline: False
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 0
+            size_hint_y: 0.75
+
+            Label:
+                text: "Priority"
+                text_size: self.size
+                halign: "left"
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 0
+                size_hint_y: 0.75
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: low_priority
+                    group: 'priority'
+                Label:
+                    text: "Low"
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: medium_priority
+                    group: 'priority'
+                Label:
+                    text: "Medium"
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: high_priority
+                    group: 'priority'
+                Label:
+                    text: "High"
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text: "Category"
+                text_size: self.size
+                halign: "left"
+            Spinner:
+                id: category_spinner
+                text: "Select Category"
+                size_hint_y: 1
+                values: root.categories
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 0
+
+            Label:
+                text: "Description"
+                text_size: self.size
+                size_hint_y: 0.75
+                halign: "left"
+
+            TextInput:
+                id: description_input
+                size_hint_y: 1.3
+                hint_text: "Enter description"
+                multiline: True
+
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: [0, 10, 0, 0]
+            spacing: 20
+
+            Button:
+                text: "Create"
+                on_press: root.create_task()
+
+            Button:
+                text: "Cancel"
+                on_press: root.manager.current = "main"
+
+<NavigationMenu>:
+    name: 'nav_menu'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: "Menu"
+            font_size: 32
+            size_hint_y: 0.2
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.3
+
+            Button:
+                text: "All tasks"
+                on_press: root.filter_tasks("all", "none")
+
+            Button:
+                text: "Today"
+                on_press: root.filter_tasks("today", "none")
+
+            Button:
+                text: "Completed"
+                on_press: root.filter_tasks("completed", "none")
+
+        Widget:
+            size_hint_y: None
+            height: 2  # Thickness of the line
+            canvas.before:
+                Color:
+                    rgba: app.theme.colors["button"]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        ScrollView:
+            size_hint_y: 0.5
+            GridLayout:
+                id: category_layout
+                cols: 1
+                size_hint_y: None
+                spacing: 5
+                height: self.minimum_height
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 5
+            size_hint_y: 0.2
+
+            Button:
+                text: "New category"
+                on_press: root.manager.current = "create_category"
+            Button:
+                text: "Back"
+                on_press: root.manager.current = "main"
+
+        Button:
+            text: "Log out"
+            on_press: root.log_out()
+            color: app.theme.colors["logout_text"]
+            canvas.before:
+                Color:
+                    rgba: app.theme.colors["logout"]
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_y: 0.2
+
+<TaskListScreen>
+    name: 'task_list_screen'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        Label:
+            text: "Tasks"
+            font_size: 32
+            size_hint_y: 0.1
+
+        ScrollView:
+            size_hint_y: 0.7
+            BoxLayout:
+                id: task_list_layout
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+
+        Button:
+            text: "Back"
+            size_hint_y: 0.1
+            on_press: root.manager.current = 'nav_menu'
+
+<ViewTask>:
+    name: "view_task"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            text: root.task_title
+            font_size: 32
+            size_hint_y: 0.5
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.6
+
+            Label:
+                text: "Due: " + root.task_due_date
+
+            Label:
+                text: "Priority: " + root.task_priority
+
+            Label:
+                text: "Category: " + root.task_category_name
+
+            Label:
+                text: root.task_description
+                multiline: True
+
+            Label:
+                text: "Status: " + root.task_status
+
+        Widget:
+            size_hint_y: 0.5
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+
+                Button:
+                    text: "Delete"
+                    color: app.theme.colors["delete_text"]
+                    canvas.before:
+                        Color:
+                            rgba: app.theme.colors["delete"]
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    on_press: root.delete_task(root.task_id)
+
+                Button:
+                    text: "Edit"
+                    color: app.theme.colors["edit_text"]
+                    canvas.before:
+                        Color:
+                            rgba: app.theme.colors["edit"]
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    on_press: root.manager.get_screen('edit_task').retrieve_details(root.task_id, root.task_title, root.task_due_date, root.task_description, root.task_priority)
+                    on_press: root.manager.current = "edit_task"
+            Button:
+                text: "Mark completed"
+                on_press: root.mark_completed(root.task_id)
+
+            Button:
+                text: "Back"
+                on_press: root.manager.current = 'nav_menu'
+
+<EditTaskScreen>
+    name: 'edit_task'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+        spacing: 5
+
+        Label:
+            text: "Edit task"
+            size_hint_y: 0.5
+            font_size: 32
+            halign: "center"
+
+        Label:
+            id: feedback_label
+            text: ""
+            size_hint_y: 0.5
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text_size: self.size
+                halign: "left"
+                text: "Title"
+
+            TextInput:
+                id: title_input
+                text: root.task_title
+                hint_text: "Enter task title"
+                multiline: False
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text: "Due date"
+                text_size: self.size
+                halign: "left"
+
+            TextInput:
+                id: due_date_input
+                text: root.task_due_date
+                hint_text: "DD-MM-YYYY"
+                multiline: False
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 0
+            size_hint_y: 0.75
+
+            Label:
+                text: "Priority"
+                text_size: self.size
+                halign: "left"
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 0
+                size_hint_y: 0.75
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: low_priority
+                    group: 'priority'
+                    active: root.task_priority == "Low"
+                Label:
+                    text: "Low"
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: medium_priority
+                    group: 'priority'
+                    active: root.task_priority == "Medium"
+                Label:
+                    text: "Medium"
+
+                CheckBox:
+                    color: 0, 0, 0, 1
+                    id: high_priority
+                    group: 'priority'
+                    active: root.task_priority == "High"
+                Label:
+                    text: "High"
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text: "Category"
+                text_size: self.size
+                halign: "left"
+            Spinner:
+                id: category_spinner
+                text: root.task_category
+                size_hint_y: 1
+                values: root.categories
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 0
+
+            Label:
+                text: "Description"
+                text_size: self.size
+                size_hint_y: 0.75
+                halign: "left"
+
+            TextInput:
+                id: description_input
+                text: root.task_description
+                size_hint_y: 1.3
+                hint_text: "Enter description"
+                multiline: True
+
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: [0, 10, 0, 0]
+            spacing: 20
+
+            Button:
+                text: "Confirm"
+                on_press: root.edit_task()
+
+            Button:
+                text: "Cancel"
+                on_press: root.manager.current = "view_task"
+
+<CreateCategory>:
+    name: 'create_category'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            text: "Create category"
+            size_hint_y: 0.5
+            font_size: 32
+            halign: "center"
+
+        Label:
+            id: feedback_label
+            text: ""
+            size_hint_y: 0.2
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            size_hint_y: 0.75
+
+            Label:
+                text_size: self.size
+                halign: "left"
+                text: "Category name"
+
+            TextInput:
+                id: category_name_input
+                hint_text: "Enter category name"
+                multiline: False
+        Widget:
+            size_hint_y: 3
+
+        Button:
+            text: "Create"
+            on_press: root.create_category(category_name_input.text)
+
+        Button:
+            text: "Cancel"
+            on_press: root.manager.current = "nav_menu"
